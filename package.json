@@ -1,0 +1,15 @@
+{
+  "name": "electonpicomdesktop",
+  "version": "1.0.0",
+  "description": "desktop app picom for admin",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^22.2.0"
+  }
+}
