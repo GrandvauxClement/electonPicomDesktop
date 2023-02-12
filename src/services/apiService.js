@@ -1,42 +1,40 @@
 const authService = require('./authService');
+const axios = require("axios");
+const keytar = require('keytar');
 
-async function getPrivateData() {
-    console.log("api servicee get private Data --> ")
-   /* const request = new Request(
-        'http://127.0.0.1:8280/api/user',
-        {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            }
-        }
-    )*/
-    fetch('http://127.0.0.1:8280/api/user', {
-        method: "GET",
+async function getAllUsers() {
+    console.log("api servicee get private Data --> ", authService.getAccessToken())
+    const token = await keytar.getPassword('electron-openid-oauth', "admin");
+
+    const response = await axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:8280/api/user',
         headers: {
             Accept: "application/json",
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${authService.getAccessToken()}`
-        }
-    })
-        .then((res) => {
-            res.json().then((data) => {
-                console.log("RESPONSE --> ", data);
-                //  profile = jwtDecode(response.data.id_token);
-                //  refreshToken = response.data.refresh_token;
-                return data
-            })
-        })
-
-    /*const result = await axios.get('http://localhost:3000/private', {
-        headers: {
-            'Authorization': `Bearer ${authService.getAccessToken()}`,
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
-    });
-    return result.data;*/
+    })
+    return response.data
 }
 
+async function getAllArea() {
+    console.log("api servicee get area --> ", authService.getAccessToken())
+    const token = await authService.getAccessToken()
+
+    const response = await axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:8280/api/area/',
+        headers: {
+            Accept: "application/json",
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+    console.log("esponse . data ---> ", response.data)
+    return response.data
+}
 module.exports = {
-    getPrivateData,
+    getAllUsers,
+    getAllArea
 }

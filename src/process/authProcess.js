@@ -1,5 +1,5 @@
 const { BrowserWindow } = require('electron');
-const authService = require('../src/services/authService');
+const authService = require('../services/authService');
 const createAppWindow = require('./mainProcess');
 const path = require("path");
 
@@ -14,11 +14,11 @@ function createAuthWindow() {
         webPreferences: {
             nodeIntegration: false,
             enableRemoteModule: false,
-            preload: path.join(__dirname, "..", "src","utils","preload.js"),
+            preload: path.join(__dirname, "..", "utils","preload.js"),
         }
     });
     //authService.getAuthenticationURL()
-    win.loadURL(path.join(__dirname, "..", "src",'views', 'index.html'));
+    win.loadURL(path.join(__dirname, "..", 'views', 'login', 'index.html'));
 
     const {session: {webRequest}} = win.webContents;
 
@@ -49,12 +49,14 @@ function destroyAuthWin() {
     win = null;
 }
 
-function createLogoutWindow() {
+async function createLogoutWindow() {
     const logoutWindow = new BrowserWindow({
         show: false,
     });
-
-    logoutWindow.loadURL(authService.getLogOutUrl());
+    console.log('On log out window !! ')
+    // logoutWindow.loadURL(authService.getLogOutUrl());
+    await authService.logout();
+    logoutWindow.close();
 
     logoutWindow.on('ready-to-show', async () => {
         await authService.logout();

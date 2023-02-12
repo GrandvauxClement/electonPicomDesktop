@@ -1,63 +1,19 @@
-/*
-const { app, BrowserWindow } = require('electron')
-const path = require('path')
-const commonService = require('./services/CommonService')
-const dashboardHomeCommunication = require('./communications/DashboardHomeCommunication')
-
-
-const createWindow = () => {
-    const win = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences: {
-            preload: path.join(__dirname, 'utils/preload.js')
-        }
-    })
-
-    win.loadFile('src/views/index.html')
-}
-
-app
-    .whenReady()
-    .then(() => {
-        generateMainWindow()
-        // Stuff spécial Mac
-        app.on('activate', () => {
-            if(BrowserWindow.getAllWindows().length === 0) {
-                generateMainWindow()
-            }
-        })
-
-        app.on('window-all-closed', () => {
-            if (process.platform !== 'darwin') app.quit()
-        })
-})
-
-
-
-function generateMainWindow() {
-    const viewPath = path.join(__dirname, 'views', 'index.html')
-    const mainWindow = commonService.createWindow(viewPath)
-
-    dashboardHomeCommunication.init()
-
-   /!* newItemCommunication.init()
-    updateItemCommunication.init()
-    deleteItemCommunication.init()*!/
-}
-*/
-
 const { app, ipcMain, BrowserWindow } = require('electron');
 
-const { createAuthWindow, createLogoutWindow } = require('../main/authProcess');
-const createAppWindow = require('../main/mainProcess');
+const { createAuthWindow, createLogoutWindow } = require('./process/authProcess');
+const createAppWindow = require('./process/mainProcess');
 const authService = require('./services/authService');
 const apiService = require('./services/apiService');
 
 async function showWindow() {
     try {
-        await authService.refreshTokens();
-        createAppWindow();
+        console.log("DNAS INIT SHOW !!!!!!!!!!!!!!!!!!!")
+        const token = await authService.refreshTokens();
+        if (token === null){
+            createAuthWindow();
+        } else {
+            createAppWindow(token);
+        }
     } catch (err) {
         createAuthWindow();
     }
@@ -68,10 +24,14 @@ async function showWindow() {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
     // Handle IPC messages from the renderer process.
-    ipcMain.handle('auth:loadTokens', authService.loadTokens)
+    ipcMain.handle('auth:loadTokens',(e, args) => {
+        authService.loadTokens(args)
+    })
     ipcMain.handle('auth:get-profile', authService.getProfile);
-    ipcMain.handle('api:get-private-data', apiService.getPrivateData);
+    ipcMain.handle('api:get-all-user', apiService.getAllUsers);
+    ipcMain.handle('api:get-all-area', apiService.getAllArea)
     ipcMain.on('auth:log-out', () => {
+        console.log("Handle log out o index.js")
         BrowserWindow.getAllWindows().forEach(window => window.close());
         createLogoutWindow();
     });
