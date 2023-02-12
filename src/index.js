@@ -30,6 +30,12 @@ app.on('ready', () => {
     ipcMain.handle('auth:get-profile', authService.getProfile);
     ipcMain.handle('api:get-all-user', apiService.getAllUsers);
     ipcMain.handle('api:get-all-area', apiService.getAllArea)
+    ipcMain.handle('api:get-area-by-id', (e, args) => {
+        return apiService.getAreaById(args)
+    })
+    ipcMain.handle('api:delete-stop-by-id', (e, args) => {
+        apiService.deleteStopById(args)
+    })
     ipcMain.on('auth:log-out', () => {
         console.log("Handle log out o index.js")
         BrowserWindow.getAllWindows().forEach(window => window.close());

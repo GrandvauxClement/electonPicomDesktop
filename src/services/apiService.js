@@ -19,7 +19,6 @@ async function getAllUsers() {
 }
 
 async function getAllArea() {
-    console.log("api servicee get area --> ", authService.getAccessToken())
     const token = await authService.getAccessToken()
 
     const response = await axios({
@@ -34,7 +33,41 @@ async function getAllArea() {
     console.log("esponse . data ---> ", response.data)
     return response.data
 }
+
+async function getAreaById(params) {
+    const token = await authService.getAccessToken()
+    console.log("*********** FCT AREA BY ID ", params)
+    const response = await axios({
+        method: 'GET',
+        url: `http://127.0.0.1:8280/api/area/${params.id}`,
+        headers: {
+            Accept: "application/json",
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+    return response.data
+}
+
+async function deleteStopById(params) {
+    const token = await authService.getAccessToken()
+    console.log("*********** FCT DELETE BY ID ", params)
+    const response = await axios({
+        method: 'DELETE',
+        url: `http://127.0.0.1:8280/api/stop/${params.id}`,
+        headers: {
+            Accept: "application/json",
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+    return response.data
+}
+
+
 module.exports = {
     getAllUsers,
-    getAllArea
+    getAllArea,
+    getAreaById,
+    deleteStopById
 }
