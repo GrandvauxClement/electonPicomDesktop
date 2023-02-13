@@ -102,6 +102,49 @@ async function createArea(params) {
     return response.data
 }
 
+async function deleteAreaById(params) {
+    const token = await authService.getAccessToken()
+    const response = await axios({
+        method: 'DELETE',
+        url: `http://127.0.0.1:8280/api/area/${params.id}`,
+        headers: {
+            Accept: "application/json",
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+    return response.data
+}
+
+async function getAllTimeInterval() {
+    const token = await authService.getAccessToken()
+
+    const response = await axios({
+        method: 'GET',
+        url: 'http://127.0.0.1:8280/api/timeInterval',
+        headers: {
+            Accept: "application/json",
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+    return response.data
+}
+
+async function updateTimeInterval(params) {
+    const token = await authService.getAccessToken()
+    const response = await axios({
+        method: 'PATCH',
+        url: `http://127.0.0.1:8280/api/timeInterval`,
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        data: params
+    })
+    return response.data
+}
+
 module.exports = {
     getAllUsers,
     getAllArea,
@@ -109,5 +152,8 @@ module.exports = {
     deleteStopById,
     addStop,
     updateArea,
-    createArea
+    createArea,
+    deleteAreaById,
+    getAllTimeInterval,
+    updateTimeInterval
 }

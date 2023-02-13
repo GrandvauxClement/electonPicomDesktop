@@ -1,5 +1,5 @@
 const dataTableBody = document.getElementById("user-data-table-content")
-
+const modalDeleteArea = document.getElementById("areaDeleteModal");
 
 addEventListener('load',async  () =>{
 
@@ -26,8 +26,10 @@ addEventListener('load',async  () =>{
         const deleteBtn = document.createElement('button')
         deleteBtn.classList.add('btn', 'btn-outline-danger', 'mx-2')
         deleteBtn.innerText = 'Suppr.'
-        deleteBtn.addEventListener('click', (e) => {
-            console.log("Dans le bouton delete")
+        deleteBtn.setAttribute("data-toggle", "modal");
+        deleteBtn.setAttribute("data-target", "#areaDeleteModal")
+        deleteBtn.addEventListener('click', async (e) => {
+            modalDeleteArea.dataset.id = data.id
         })
         tdAction.append(editBtn, deleteBtn);
         tr.append(tdName, tdPrice, tdNbStop, tdAction)
@@ -36,3 +38,10 @@ addEventListener('load',async  () =>{
     })
     $('#dataTable').DataTable();
 });
+
+
+modalDeleteArea.addEventListener('click', async (e) => {
+    console.log("Dans le bouton delete")
+    await window.electronAPI.deleteAreaById({id: modalDeleteArea.dataset.id})
+    window.location.reload();
+})
