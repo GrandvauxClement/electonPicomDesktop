@@ -3,7 +3,7 @@ const buttonDeleteStop = document.getElementById("deleteStop")
 const buttonUpdateArea= document.getElementById("updateArea")
 const buttonAddStop = document.getElementById("addStop")
 const listStop = document.getElementById("listStop")
-// Form update area
+// Form update/create area
 const updateAreaBtn = document.getElementById("updateArea");
 const inputNameArea = document.getElementById("inputNameArea");
 const inputPriceArea = document.getElementById("inputPriceArea")
@@ -44,18 +44,30 @@ const getIdParamsOnRoad = () => {
 }
 
 addEventListener('load',async  () =>{
-
-    const response = await window.electronAPI.getAreaById({id: getIdParamsOnRoad()});
-    areaSelected = response
     const titlePage = document.getElementById('titlePage');
-    titlePage.innerText = `Détail de la zone ${response.name}`
-    console.log("area data --> ", response)
-    inputNameArea.value = response.name;
-    inputPriceArea.value = response.price
-    response.stopList.forEach((stop) => {
+    if (getIdParamsOnRoad() != null) {
+        const response = await window.electronAPI.getAreaById({id: getIdParamsOnRoad()});
+        areaSelected = response
 
-        createLiListStop(stop)
-    })
+        titlePage.innerText = `Détail de la zone ${response.name}`
+        inputNameArea.value = response.name;
+        inputPriceArea.value = response.price
+        response.stopList.forEach((stop) => {
+
+            createLiListStop(stop)
+        })
+    } else {
+        buttonAddStop.disabled = true;
+        updateAreaBtn.innerText = "Créer la nouvelle zone";
+        titlePage.innerText = `Ajouter une nouvelle zone`;
+        areaSelected = {
+            id: null,
+            name: "",
+            price: 0,
+            listStop: []
+        };
+    }
+
 });
 
 buttonDeleteStop.addEventListener('click', async () => {
@@ -65,18 +77,23 @@ buttonDeleteStop.addEventListener('click', async () => {
 })
 
 buttonAddStop.addEventListener('click', async () => {
-    const newStop = {
-        "name": inputNameStop.value,
-        "latitude": inputAdress.dataset.latitude,
-        "longitude": inputAdress.dataset.longitude,
-        "area": {id: getIdParamsOnRoad()},
-        "adressIp": inputAdressIp.value
-    };
-    const res = await window.electronAPI.addStop(newStop)
+    if (areaSelected != null){
+        const newStop = {
+            "name": inputNameStop.value,
+            "latitude": inputAdress.dataset.latitude,
+            "longitude": inputAdress.dataset.longitude,
+            "area": {id: getIdParamsOnRoad()},
+            "adressIp": inputAdressIp.value
+        };
+        const res = await window.electronAPI.addStop(newStop)
 
-    createLiListStop(res)
-    document.getElementById("closeModalStop").click()
-    areaSelected.stopList.push(res)
+        createLiListStop(res)
+        document.getElementById("closeModalStop").click()
+        areaSelected.stopList.push(res)
+    } else {
+        // display alert
+    }
+
 })
 
 inputAdress.addEventListener('input',  (e) => {
@@ -109,6 +126,12 @@ inputAdress.addEventListener('input',  (e) => {
 updateAreaBtn.addEventListener('click', async () => {
     areaSelected.name = inputNameArea.value;
     areaSelected.price = inputPriceArea.value
-    const res = await window.electronAPI.updateArea(areaSelected)
-    console.log("UPDATE DONE --> res")
+    if (areaSelected.id != null){
+        await window.electronAPI.updateArea(areaSelected)
+    } else {
+        const res = await window.electronAPI.createArea(areaSelected)
+        console.log("================== RES --> ", res);
+        buttonAddStop.removeAttribute("disabled");
+    }
+
 })

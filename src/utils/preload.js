@@ -10,7 +10,8 @@ const electronAPI = {
     getAreaById: (args) => ipcRenderer.invoke('api:get-area-by-id', args),
     deleteStopById: (args) => ipcRenderer.invoke('api:delete-stop-by-id', args),
     addStop: (args) => ipcRenderer.invoke('api:add-stop', args),
-    updateArea: (args) => ipcRenderer.invoke('api:update-area', args)
+    updateArea: (args) => ipcRenderer.invoke('api:update-area', args),
+    createArea: (args) => ipcRenderer.invoke('api:create-area', args),
 };
 
 // Register the API with the contextBridge

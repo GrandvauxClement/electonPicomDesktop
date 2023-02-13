@@ -88,11 +88,26 @@ async function updateArea(params) {
     return response.data
 }
 
+async function createArea(params) {
+    const token = await authService.getAccessToken()
+    const response = await axios({
+        method: 'POST',
+        url: `http://127.0.0.1:8280/api/area/`,
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        data: params
+    })
+    return response.data
+}
+
 module.exports = {
     getAllUsers,
     getAllArea,
     getAreaById,
     deleteStopById,
     addStop,
-    updateArea
+    updateArea,
+    createArea
 }

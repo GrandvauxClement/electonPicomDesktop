@@ -42,6 +42,9 @@ app.on('ready', () => {
     ipcMain.handle('api:update-area', (e, args) => {
         return apiService.updateArea(args)
     })
+    ipcMain.handle('api:create-area', (e, args) => {
+        return apiService.createArea(args)
+    })
     ipcMain.on('auth:log-out', () => {
         console.log("Handle log out o index.js")
         BrowserWindow.getAllWindows().forEach(window => window.close());
