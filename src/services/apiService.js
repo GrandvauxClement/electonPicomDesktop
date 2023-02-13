@@ -3,7 +3,6 @@ const axios = require("axios");
 const keytar = require('keytar');
 
 async function getAllUsers() {
-    console.log("api servicee get private Data --> ", authService.getAccessToken())
     const token = await keytar.getPassword('electron-openid-oauth', "admin");
 
     const response = await axios({
@@ -30,13 +29,11 @@ async function getAllArea() {
             'Authorization': `Bearer ${token}`
         },
     })
-    console.log("esponse . data ---> ", response.data)
     return response.data
 }
 
 async function getAreaById(params) {
     const token = await authService.getAccessToken()
-    console.log("*********** FCT AREA BY ID ", params)
     const response = await axios({
         method: 'GET',
         url: `http://127.0.0.1:8280/api/area/${params.id}`,
@@ -51,7 +48,6 @@ async function getAreaById(params) {
 
 async function deleteStopById(params) {
     const token = await authService.getAccessToken()
-    console.log("*********** FCT DELETE BY ID ", params)
     const response = await axios({
         method: 'DELETE',
         url: `http://127.0.0.1:8280/api/stop/${params.id}`,
@@ -64,10 +60,39 @@ async function deleteStopById(params) {
     return response.data
 }
 
+async function addStop(params) {
+    const token = await authService.getAccessToken()
+    const response = await axios({
+        method: 'POST',
+        url: `http://127.0.0.1:8280/api/stop`,
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        data: params
+    })
+    return response.data
+}
+
+async function updateArea(params) {
+    const token = await authService.getAccessToken()
+    const response = await axios({
+        method: 'PATCH',
+        url: `http://127.0.0.1:8280/api/area/`,
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+        data: params
+    })
+    return response.data
+}
 
 module.exports = {
     getAllUsers,
     getAllArea,
     getAreaById,
-    deleteStopById
+    deleteStopById,
+    addStop,
+    updateArea
 }

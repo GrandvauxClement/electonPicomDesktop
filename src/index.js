@@ -33,8 +33,14 @@ app.on('ready', () => {
     ipcMain.handle('api:get-area-by-id', (e, args) => {
         return apiService.getAreaById(args)
     })
+    ipcMain.handle('api:add-stop', (e, args) => {
+        return apiService.addStop(args)
+    })
     ipcMain.handle('api:delete-stop-by-id', (e, args) => {
         apiService.deleteStopById(args)
+    })
+    ipcMain.handle('api:update-area', (e, args) => {
+        return apiService.updateArea(args)
     })
     ipcMain.on('auth:log-out', () => {
         console.log("Handle log out o index.js")

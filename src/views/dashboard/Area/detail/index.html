@@ -237,20 +237,40 @@
                 <!-- Page Heading -->
                 <h1 class="h3 mb-2 text-gray-800" id="titlePage">Detail</h1>
                 <p class="mb-4">
-                    Ajouter ou supprimer des arrêts, modifier le nom ou le prix de cette zone, ...
+                    Ajouter ou supprimer des arrêts, modifier le nom ou le prix de cette zone, Cliquer bien sur modifier
+                    pour valider les modifications
                 </p>
 
                 <!-- DataTales Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Utilisateurs</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Info générales</h6>
                     </div>
                     <div class="card-body">
-                        <h6>Liste des arrêts</h6>
+                        <form>
+                            <div class="form-group">
+                                <label for="inputNameArea">Nom de la zone</label>
+                                <input type="text" class="form-control" id="inputNameArea" placeholder="Nom de la zone">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="inputPriceArea">Prix de base de la zone (en €)</label>
+                                <input type="number" step="0.01" class="form-control" id="inputPriceArea" placeholder="Nom de la zone">
+                            </div>
+                            <button id="updateArea" class="btn btn-primary">Modifier</button>
+                        </form>
+                    </div>
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">Gestion des arrêts</h6>
+                    </div>
+                    <div class="card-body">
                         <ul id="listStop" class="list-group">
 
                         </ul>
-                        <button id="addStop" class="btn btn-primary">Ajouter un nouvel arrêt</button>
+                        <a class="btn btn-primary" data-toggle="modal" data-target="#addStopModal" >
+                            Ajouter un nouvel arrêt
+                        </a>
+
                     </div>
                 </div>
 
@@ -264,7 +284,7 @@
         <footer class="sticky-footer bg-white">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright &copy; Your Website 2020</span>
+                    <span>Copyright &copy; Picom 2023</span>
                 </div>
             </div>
         </footer>
@@ -314,8 +334,45 @@
             </div>
             <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
             <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
                 <button id="deleteStop" class="btn btn-primary" >Supprimer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add stop Modal-->
+<div class="modal fade" id="addStopModal" tabindex="-1" role="dialog" aria-labelledby="addStopModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addStopModalLabel">Création d'un nouvel arrêt</h5>
+                <button class="close" id="closeModalStop" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="inputNameStop">Nom de l'arrêt</label>
+                        <input type="text" class="form-control" id="inputNameStop" placeholder="Nom arrêt">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAdressIPStop">Son adresse ip</label>
+                        <input type="text" class="form-control" id="inputAdressIPStop" placeholder="127.0.0.1">
+                    </div>
+                    <div class="form-group">
+                        <label for="inputAdressStop">Saisir l'adresse</label>
+                        <input type="text" class="form-control" id="inputAdressStop" placeholder="34 rue de la gare 63000 clermont">
+                        <div class="list-group" id="adressListDisplay">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Annuler</button>
+                <button id="addStop" class="btn btn-primary" >Ajouter</button>
             </div>
         </div>
     </div>
