@@ -5,16 +5,17 @@ const keytar = require("keytar");
 async function createAppWindow(token) {
     try {
         let win = new BrowserWindow({
-            width: 1000,
-            height: 600,
+            width: 1200,
+            height: 800,
             webPreferences: {
                 preload: path.join(__dirname, "..", "utils", "preload.js"),
-            }
+                enableRemoteModule: true
+            },
         });
-        await keytar.setPassword('electron-openid-oauth', "admin", token);
-        const tokenGet = await keytar.getPassword('electron-openid-oauth', "admin");
-        console.log("*****************CREATE APP WINDOW token keytar--> ", tokenGet)
-
+        const tokenGet = await keytar.getPassword(process.env.KEYTAR_SERVICE, process.env.KEYTAR_ACCOUNT);
+        if (tokenGet === null){
+            await keytar.setPassword(process.env.KEYTAR_SERVICE, process.env.KEYTAR_ACCOUNT, token);
+        }
         win.loadFile(path.join(__dirname, "..", 'views', 'dashboard', 'home.html'));
 
         win.on('closed', () => {
@@ -23,7 +24,6 @@ async function createAppWindow(token) {
     } catch (err) {
         throw err
     }
-
 }
 
 module.exports = createAppWindow;

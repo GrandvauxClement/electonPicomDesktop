@@ -18,6 +18,4 @@ const electronAPI = {
 };
 
 // Register the API with the contextBridge
-/*process.once("loaded", () => {*/
-    contextBridge.exposeInMainWorld('electronAPI', electronAPI);
-/*});*/
+contextBridge.exposeInMainWorld('electronAPI', electronAPI);

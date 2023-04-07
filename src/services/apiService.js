@@ -3,11 +3,11 @@ const axios = require("axios");
 const keytar = require('keytar');
 
 async function getAllUsers() {
-    const token = await keytar.getPassword('electron-openid-oauth', "admin");
 
+    const token = await keytar.getPassword(`${process.env.KEYTAR_SERVICE}`, `${process.env.KEYTAR_ACCOUNT}`);
     const response = await axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8280/api/user',
+        url: `${process.env.API_URL}api/user`,
         headers: {
             Accept: "application/json",
             'content-type': 'application/json',
@@ -22,13 +22,13 @@ async function getAllArea() {
 
     const response = await axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8280/api/area/',
+        url: `${process.env.API_URL}api/area`,
         headers: {
             Accept: "application/json",
             'content-type': 'application/json',
             'Authorization': `Bearer ${token}`
         },
-    })
+    } )
     return response.data
 }
 
@@ -36,7 +36,7 @@ async function getAreaById(params) {
     const token = await authService.getAccessToken()
     const response = await axios({
         method: 'GET',
-        url: `http://127.0.0.1:8280/api/area/${params.id}`,
+        url: `${process.env.API_URL}api/area/${params.id}`,
         headers: {
             Accept: "application/json",
             'content-type': 'application/json',
@@ -50,7 +50,7 @@ async function deleteStopById(params) {
     const token = await authService.getAccessToken()
     const response = await axios({
         method: 'DELETE',
-        url: `http://127.0.0.1:8280/api/stop/${params.id}`,
+        url: `${process.env.API_URL}api/stop/${params.id}`,
         headers: {
             Accept: "application/json",
             'content-type': 'application/json',
@@ -64,7 +64,7 @@ async function addStop(params) {
     const token = await authService.getAccessToken()
     const response = await axios({
         method: 'POST',
-        url: `http://127.0.0.1:8280/api/stop`,
+        url: `${process.env.API_URL}api/stop`,
         headers: {
             'content-type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -78,7 +78,7 @@ async function updateArea(params) {
     const token = await authService.getAccessToken()
     const response = await axios({
         method: 'PATCH',
-        url: `http://127.0.0.1:8280/api/area/`,
+        url: `${process.env.API_URL}api/area`,
         headers: {
             'content-type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -92,7 +92,7 @@ async function createArea(params) {
     const token = await authService.getAccessToken()
     const response = await axios({
         method: 'POST',
-        url: `http://127.0.0.1:8280/api/area/`,
+        url: `${process.env.API_URL}api/area`,
         headers: {
             'content-type': 'application/json',
             'Authorization': `Bearer ${token}`
@@ -106,7 +106,7 @@ async function deleteAreaById(params) {
     const token = await authService.getAccessToken()
     const response = await axios({
         method: 'DELETE',
-        url: `http://127.0.0.1:8280/api/area/${params.id}`,
+        url: `${process.env.API_URL}api/area/${params.id}`,
         headers: {
             Accept: "application/json",
             'content-type': 'application/json',
@@ -121,7 +121,7 @@ async function getAllTimeInterval() {
 
     const response = await axios({
         method: 'GET',
-        url: 'http://127.0.0.1:8280/api/timeInterval',
+        url: `${process.env.API_URL}api/timeInterval`,
         headers: {
             Accept: "application/json",
             'content-type': 'application/json',
@@ -135,7 +135,7 @@ async function updateTimeInterval(params) {
     const token = await authService.getAccessToken()
     const response = await axios({
         method: 'PATCH',
-        url: `http://127.0.0.1:8280/api/timeInterval`,
+        url: `${process.env.API_URL}api/timeInterval`,
         headers: {
             'content-type': 'application/json',
             'Authorization': `Bearer ${token}`

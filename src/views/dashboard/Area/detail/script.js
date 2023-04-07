@@ -97,6 +97,7 @@ buttonAddStop.addEventListener('click', async () => {
 })
 
 inputAdress.addEventListener('input',  (e) => {
+    console.log("RAHAHAHAHAH")
     fetch(encodeURI(`https://api-adresse.data.gouv.fr/search/?q=${inputAdress.value}&limit=10`))
         .then((res) => {
             if (res.status === 200) {

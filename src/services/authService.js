@@ -1,27 +1,22 @@
 const jwtDecode = require('jwt-decode');
 const axios = require('axios');
-const url = require('url');
-//const envVariables = require('../env-variables');
 const keytar = require('keytar');
-const os = require('os');
-
+const { BrowserWindow } = require('electron');
 const createAppWindow = require("../process/mainProcess");
-const {destroyAuthWin} = require("../process/authProcess");
-
-
-//const {apiIdentifier, auth0Domain, clientId} = envVariables;
-
-const redirectUri = 'http://localhost/callback';
-
-const keytarService = 'electron-openid-oauth';
-const keytarAccount = "admin";
 
 let accessToken = null;
 let profile = null;
 let refreshToken = null;
 
 async function getAccessToken() {
-    const token = await keytar.getPassword('electron-openid-oauth', "admin");
+    const token = await keytar.getPassword(process.env.KEYTAR_SERVICE, process.env.KEYTAR_ACCOUNT);
+    if (token != null){
+        const decoded = jwtDecode(token)
+        const expirationDate = new Date(decoded.exp * 1000);
+        if (new Date() > expirationDate){
+            return null
+        }
+    }
     return token
 }
 
@@ -29,32 +24,15 @@ function getProfile() {
     return profile;
 }
 
-function getAuthenticationURL() {
-    return (
-       /* "https://" +
-        auth0Domain +
-        "/authorize?" +
-        "scope=openid profile offline_access&" +
-        "response_type=code&" +
-        "client_id=" +
-        clientId +
-        "&" +
-        "redirect_uri=" +
-        redirectUri*/
-        "http://127.0.0.1:8280/auth/login"
-    );
-}
-
 async function refreshTokens() {
-
-
         try {
-            const refreshToken = await keytar.getPassword(keytarService, keytarAccount);
-            console.log("Refresh token --> ", refreshToken);
+            const refreshToken = await keytar.getPassword(process.env.KEYTAR_SERVICE, process.env.KEYTAR_ACCOUNT);
+            const decoded = jwtDecode(refreshToken)
+            const expirationDate = new Date(decoded.exp * 1000);
+            console.log("expiration date --> ", expirationDate);
             return refreshToken
         } catch (error) {
             await logout();
-
             throw error;
         }
 }
@@ -63,19 +41,20 @@ async function loadTokens(args) {
     try {
           const response = await axios({
               method: 'POST',
-              url: "http://127.0.0.1:8280/auth/login",
+              url: `${process.env.API_URL}auth/login`,
               headers: {'content-type': 'application/json'},
               data: {
                 email: args.email,
                 password: args.password
             }
           });
-        accessToken = response.data.accessToken;
 
-        createAppWindow(response.data.accessToken);
-        destroyAuthWin();
+        accessToken = response.headers['set-cookie'][0];
+        const token = accessToken.split('=')[1].split(';')[0]
+        const win = BrowserWindow.getFocusedWindow();
+        win.close();
+        createAppWindow(token);
         return true
-
     } catch (error) {
         await logout();
 
@@ -84,7 +63,7 @@ async function loadTokens(args) {
 }
 
 async function logout() {
-    await keytar.deletePassword(keytarService, keytarAccount);
+    await keytar.deletePassword(process.env.KEYTAR_SERVICE, process.env.KEYTAR_ACCOUNT);
     accessToken = null;
     profile = null;
     refreshToken = null;
@@ -92,7 +71,6 @@ async function logout() {
 
 module.exports = {
     getAccessToken,
-    getAuthenticationURL,
     getProfile,
     loadTokens,
     logout,
