@@ -1,6 +1,6 @@
 const modalDeleteStop = document.getElementById("stopDeleteModal");
 const buttonDeleteStop = document.getElementById("deleteStop")
-const buttonUpdateArea= document.getElementById("updateArea")
+const buttonUpdateArea = document.getElementById("updateArea")
 const buttonAddStop = document.getElementById("addStop")
 const listStop = document.getElementById("listStop")
 // Form update/create area
@@ -82,8 +82,8 @@ buttonAddStop.addEventListener('click', async () => {
             "name": inputNameStop.value,
             "latitude": inputAdress.dataset.latitude,
             "longitude": inputAdress.dataset.longitude,
-            "area": {id: getIdParamsOnRoad()},
-            "adressIp": inputAdressIp.value
+            "areaId": getIdParamsOnRoad(),
+            "addressIp": inputAdressIp.value
         };
         const res = await window.electronAPI.addStop(newStop)
 
@@ -95,9 +95,9 @@ buttonAddStop.addEventListener('click', async () => {
     }
 
 })
-
+// Search Adress with api gouv
 inputAdress.addEventListener('input',  (e) => {
-    console.log("RAHAHAHAHAH")
+
     fetch(encodeURI(`https://api-adresse.data.gouv.fr/search/?q=${inputAdress.value}&limit=10`))
         .then((res) => {
             if (res.status === 200) {

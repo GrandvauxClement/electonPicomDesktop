@@ -19,7 +19,7 @@ async function getAllUsers() {
 
 async function getAllArea() {
     const token = await authService.getAccessToken()
-
+    console.log("token get for all area !! :) ", token);
     const response = await axios({
         method: 'GET',
         url: `${process.env.API_URL}api/area`,

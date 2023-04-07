@@ -14,6 +14,7 @@ async function getAccessToken() {
         const decoded = jwtDecode(token)
         const expirationDate = new Date(decoded.exp * 1000);
         if (new Date() > expirationDate){
+            await keytar.deletePassword(process.env.KEYTAR_SERVICE, process.env.KEYTAR_ACCOUNT);
             return null
         }
     }
@@ -51,6 +52,7 @@ async function loadTokens(args) {
 
         accessToken = response.headers['set-cookie'][0];
         const token = accessToken.split('=')[1].split(';')[0]
+        console.log("toeken !!!!!!!!!!!!!!! after login --> ", token)
         const win = BrowserWindow.getFocusedWindow();
         win.close();
         createAppWindow(token);
