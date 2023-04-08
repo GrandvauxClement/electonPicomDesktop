@@ -76,7 +76,10 @@ buttonDeleteStop.addEventListener('click', async () => {
     window.location.reload()
 })
 
-buttonAddStop.addEventListener('click', async () => {
+buttonAddStop.addEventListener('click', async (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+
     if (areaSelected != null){
         const newStop = {
             "name": inputNameStop.value,
@@ -86,15 +89,40 @@ buttonAddStop.addEventListener('click', async () => {
             "addressIp": inputAdressIp.value
         };
         const res = await window.electronAPI.addStop(newStop)
-
-        createLiListStop(res)
-        document.getElementById("closeModalStop").click()
-        areaSelected.stopList.push(res)
+       createLiListStop(res)
+       document.getElementById("closeModalStop").click()
+       areaSelected.stopList.push(res)
     } else {
         // display alert
     }
-
 })
+
+/*formStop.addEventListener('submit', async (e) => {
+    if (!formStop.checkValidity()) {
+        e.preventDefault()
+        e.stopPropagation()
+    } else {
+        e.classList.add('was-validated')
+        if (areaSelected != null){
+            const newStop = {
+                "name": inputNameStop.value,
+                "latitude": inputAdress.dataset.latitude,
+                "longitude": inputAdress.dataset.longitude,
+                "areaId": getIdParamsOnRoad(),
+                "addressIp": inputAdressIp.value
+            };
+            const res = await window.electronAPI.addStop(newStop)
+            //  window.location.reload();
+            console.log("res received go add new stop --> ", res);
+            //   createLiListStop(res)
+            //   document.getElementById("closeModalStop").click()
+            console.log("After close modal !! :) areaSelected ? ");
+            // areaSelected.stopList.push(res)
+        } else {
+            // display alert
+        }
+    }
+})*/
 // Search Adress with api gouv
 inputAdress.addEventListener('input',  (e) => {
 
@@ -131,7 +159,6 @@ updateAreaBtn.addEventListener('click', async () => {
         await window.electronAPI.updateArea(areaSelected)
     } else {
         const res = await window.electronAPI.createArea(areaSelected)
-        console.log("================== RES --> ", res);
         buttonAddStop.removeAttribute("disabled");
     }
 

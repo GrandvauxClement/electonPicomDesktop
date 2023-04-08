@@ -1,10 +1,10 @@
 const dataTableBody = document.getElementById("user-data-table-content")
 const modalDeleteArea = document.getElementById("areaDeleteModal");
+const buttonDeleteArea = document.getElementById("deleteStop")
 
 addEventListener('load',async  () =>{
 
     const response = await window.electronAPI.getAllArea();
-    console.log("------ AREA SCRIPT --> ", response)
     response.forEach((data) => {
         const tr = document.createElement('tr');
         const tdName = document.createElement('td');
@@ -62,9 +62,7 @@ addEventListener('load',async  () =>{
     } );
 });
 
-
-modalDeleteArea.addEventListener('click', async (e) => {
-    console.log("Dans le bouton delete")
+buttonDeleteArea.addEventListener('click', async (e) => {
     await window.electronAPI.deleteAreaById({id: modalDeleteArea.dataset.id})
     window.location.reload();
 })

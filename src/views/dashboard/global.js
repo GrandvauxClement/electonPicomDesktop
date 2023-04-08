@@ -2,7 +2,7 @@ document.getElementById('logout').onclick = () => {
     window.electronAPI.logOut();
 };
 
-(function () {
+/*(function () {
     'use strict'
 // Fetch all the forms we want to apply custom Bootstrap validation styles to
 let forms = document.querySelectorAll('.needs-validation')
@@ -19,4 +19,4 @@ Array.prototype.slice.call(forms)
             form.classList.add('was-validated')
         }, false)
     })
-})()
+})()*/

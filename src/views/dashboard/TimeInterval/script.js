@@ -16,6 +16,7 @@ addEventListener('load',async  () =>{
         tdTimeSlot.innerText = `${data.timeSlot} h`;
         const tdCoef = document.createElement('td');
         tdCoef.innerText = `${data.coefMulti}`;
+        tdCoef.id = `timeIntervalCoeff-${data.id}`
 
         const tdAction = document.createElement('td');
 
@@ -64,9 +65,12 @@ addEventListener('load',async  () =>{
 });
 
 updateTimeIntervalBtn.addEventListener('click', async (e) => {
+    const idSelected = modalEditTimeInterval.dataset.id;
     await window.electronAPI.updateTimeInterval({
-        id: modalEditTimeInterval.dataset.id,
+        id: idSelected,
         timeSlot: modalEditTimeInterval.dataset.timeSlot,
         coefMulti: inputCoef.value
     });
+    document.getElementById(`timeIntervalCoeff-${idSelected}`).innerText = inputCoef.value;
+    document.getElementById("closeModalTimeIntervalUpdate").click();
 })
