@@ -19,12 +19,10 @@ addEventListener('load',async  () =>{
         tdAdLength.innerText = `${data.adList.length}`
         const tdAction = document.createElement('td');
 
-        const editBtn = document.createElement('button')
+        const editBtn = document.createElement('a')
         editBtn.classList.add('btn', 'btn-outline-warning', 'mx-2')
-        editBtn.innerText = 'Modif.'
-        editBtn.addEventListener('click', (e) => {
-            console.log("Dans le bouton voir")
-        })
+        editBtn.innerText = 'Détail'
+        editBtn.href = `./detail/index.html?id=${data.id}`
 
         const deleteBtn = document.createElement('button')
         deleteBtn.classList.add('btn', 'btn-outline-danger', 'mx-2')

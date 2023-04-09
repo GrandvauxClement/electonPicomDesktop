@@ -17,6 +17,36 @@ async function getAllUsers() {
     return response.data
 }
 
+async function getUserById(param) {
+
+    const token = await keytar.getPassword(`${process.env.KEYTAR_SERVICE}`, `${process.env.KEYTAR_ACCOUNT}`);
+    const response = await axios({
+        method: 'GET',
+        url: `${process.env.API_URL}api/user/${param.id}`,
+        headers: {
+            Accept: "application/json",
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+    return response.data
+}
+
+async function getAdsByUserId(param) {
+
+    const token = await keytar.getPassword(`${process.env.KEYTAR_SERVICE}`, `${process.env.KEYTAR_ACCOUNT}`);
+    const response = await axios({
+        method: 'GET',
+        url: `${process.env.API_URL}api/ads/user/${param.id}`,
+        headers: {
+            Accept: "application/json",
+            'content-type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        },
+    })
+    return response.data
+}
+
 async function getAllArea() {
     const token = await authService.getAccessToken()
     console.log("token get for all area !! :) ", token);
@@ -148,6 +178,8 @@ async function updateTimeInterval(params) {
 
 module.exports = {
     getAllUsers,
+    getUserById,
+    getAdsByUserId,
     getAllArea,
     getAreaById,
     deleteStopById,

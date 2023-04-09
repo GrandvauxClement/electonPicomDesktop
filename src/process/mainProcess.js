@@ -9,7 +9,7 @@ async function createAppWindow(token) {
             height: 800,
             webPreferences: {
                 preload: path.join(__dirname, "..", "utils", "preload.js"),
-                enableRemoteModule: true
+               // enableRemoteModule: true
             },
         });
         const tokenGet = await keytar.getPassword(process.env.KEYTAR_SERVICE, process.env.KEYTAR_ACCOUNT);

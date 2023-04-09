@@ -28,6 +28,12 @@ app.on('ready', () => {
         authService.loadTokens(args)
     })
     ipcMain.handle('api:get-all-user', apiService.getAllUsers);
+    ipcMain.handle('api:get-ads-by-user', (e, args) => {
+        return apiService.getAdsByUserId(args)
+    })
+    ipcMain.handle('api:get-user-by-id', (e, args) => {
+        return apiService.getUserById(args)
+    })
     ipcMain.handle('api:get-all-area', apiService.getAllArea)
     ipcMain.handle('api:get-area-by-id', (e, args) => {
         return apiService.getAreaById(args)
