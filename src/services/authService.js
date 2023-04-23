@@ -50,13 +50,19 @@ async function loadTokens(args) {
             }
           });
 
-        accessToken = response.headers['set-cookie'][0];
-        const token = accessToken.split('=')[1].split(';')[0]
-        console.log("toeken !!!!!!!!!!!!!!! after login --> ", token)
-        const win = BrowserWindow.getFocusedWindow();
-        win.close();
-        createAppWindow(token);
-        return true
+          if (response.status === 200 && response.data.roles.includes('ROLE_ADMIN')) {
+              accessToken = response.headers['set-cookie'][0];
+              const token = accessToken.split('=')[1].split(';')[0]
+
+              const win = BrowserWindow.getFocusedWindow();
+              win.close();
+              createAppWindow(token);
+              return true
+          } else {
+              return false
+          }
+
+
     } catch (error) {
         await logout();
 
